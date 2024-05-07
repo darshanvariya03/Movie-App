@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import { data, category } from './Data'
+import { useState } from 'react';
+
 
 function App() {
+
+  const [filtereData, setFiltereData] = useState(data);
+  const [record,setRecord] = useState(data);
+
+  let allData = filtereData.length > 0 ? filtereData : record
+
+  const filterButton = (cat) => {
+    const alldata = data.filter(movie => movie.category === cat);
+    setFiltereData(alldata);
+  };
+
+  const searchName = (value) => {
+    let s = data.filter((item) => {
+      return item.name.toLowerCase().includes(value.toLowerCase());
+    })
+    setFiltereData(s)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header category={category} filterdata={filterButton} searchName={searchName} />
+      <Home allData={allData}  />
+    </>
   );
 }
 
